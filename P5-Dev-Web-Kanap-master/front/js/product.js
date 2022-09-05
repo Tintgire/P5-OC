@@ -45,9 +45,6 @@ fetch(`http://localhost:3000/api/products/${getId}`)
         let selectedId = getId;
         let selectedColor = flagColors.value;
         let selectedQuantity = flagQuantity.value;
-        //let selectedPrice = data.price;
-        //let selectedName = data.name;
-        //let selectedImg = data.imageUrl;
 
         // Création d'un objet qui comporte 3 clé et 3 valeurs mais ne vas pas créer un tableau pour autant !
         let product = {
@@ -55,9 +52,6 @@ fetch(`http://localhost:3000/api/products/${getId}`)
           id: selectedId,
           color: selectedColor,
           quantity: selectedQuantity,
-          //price: selectedPrice,
-          //name: selectedName,
-          //img: selectedImg,
         };
 
         // Vérification des conditions avant d'ajouter au panier
