@@ -1,11 +1,5 @@
 const addProduct = JSON.parse(localStorage.getItem("basket"));
 const flagItem = document.querySelector("#cart__items");
-const flagChangeQuantity = document.getElementsByClassName("itemQuantity");
-//const flagChangeQuantity = document.querySelectorAll(".itemQuantity");
-/*for (const kanap of addProduct) {
-  console.log(kanap.id, kanap.color, kanap.quantity);
-
-}*/
 
 for (const i of addProduct) {
   fetch(`http://localhost:3000/api/products/${i.id}`)
@@ -13,7 +7,7 @@ for (const i of addProduct) {
     .then((data) => {
       displayCart(i, data);
       getTotalPrice(i, data);
-      test(i);
+      changeQuantity();
     });
 }
 
@@ -103,34 +97,20 @@ function removeFromBasket(product) {
   saveBasket(basket);
 }
 
-let basket = getBasket();
-console.log(basket);
-
-function test(localStorageData) {
+function changeQuantity() {
+  const flagChangeQuantity = document.getElementsByClassName("itemQuantity");
   for (let input of flagChangeQuantity) {
     input.addEventListener("change", (e) => {
-      console.log(e.target.closest(".cart__item"));
-      let modifyValue = e.target.value;
-      let actuallyId = localStorageData.id;
-      let actuallyColor = localStorageData.color;
-      let actuallyQuantity = localStorageData.quantity;
       let basket = getBasket();
+      console.log(basket);
+      let kanapDataSetId = e.target.closest(".cart__item").dataset.id;
+      let kanapQuantity = e.target.value;
 
-      let foundProduct = basket.find(
-        (p) => p.id == localStorageData.id && p.color == localStorageData.color
-      );
-
-      getTotalPrice;
+      let foundProduct = basket.find((p) => p.id == kanapDataSetId);
       if (foundProduct != undefined) {
-        let deductQuantity = parseInt(actuallyQuantity) - parseInt(modifyValue);
-        foundProduct.quantity =
-          parseInt(actuallyQuantity) - parseInt(deductQuantity);
-        saveBasket(basket);
-      } else {
-        removeFromBasket(product);
+        foundProduct.quantity = kanapQuantity;
       }
-      //console.log("Valeur modifier :", input.value);
-      //console.log(actuallyId, actuallyColor);
+      saveBasket(basket);
     });
   }
 }
