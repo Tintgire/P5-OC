@@ -50,6 +50,7 @@ const displayCart = (localStorageData, apiData) => {
 ////////////////////////////////////////// Etape 9 //////////////////////////////////////////
 
 const flagNumberProduct = document.querySelector("#totalQuantity");
+const numberProduct = getNumberProduct();
 
 function saveBasket(basket) {
   localStorage.setItem("basket", JSON.stringify(basket));
@@ -69,19 +70,24 @@ function getNumberProduct() {
   let number = 0;
   for (let product of basket) {
     number += parseInt(product.quantity);
-    flagNumberProduct.innerHTML = `
-  ${number}
-  `;
   }
   return number;
 }
-getNumberProduct();
+
+flagNumberProduct.innerHTML = `
+${numberProduct}
+`;
 
 const flagTotalPrice = document.querySelector("#totalPrice");
 let number = 0;
 
 const getTotalPrice = (localStorageData, apiData) => {
   number += parseInt(localStorageData.quantity) * parseInt(apiData.price);
+
+  //console.log(`nombre d'article : ${localStorageData.quantity}`);
+  //console.log(`Prix de l'article : ${apiData.price}`);
+  //return number;
+  //console.log(`Total : ${number}`);
   flagTotalPrice.textContent = `${number}`;
 };
 
@@ -96,6 +102,7 @@ function changeQuantity() {
   for (let input of flagChangeQuantity) {
     input.addEventListener("change", (e) => {
       let basket = getBasket();
+      console.log(basket);
       let kanapDataSetId = e.target.closest(".cart__item").dataset.id;
       let kanapQuantity = e.target.value;
 
@@ -104,7 +111,6 @@ function changeQuantity() {
         foundProduct.quantity = kanapQuantity;
       }
       saveBasket(basket);
-      getNumberProduct();
     });
   }
 }
