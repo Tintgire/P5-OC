@@ -1,14 +1,49 @@
 const addProduct = JSON.parse(localStorage.getItem("basket"));
 const flagItem = document.querySelector("#cart__items");
+let kanapPrice = [];
 
-for (const i of addProduct) {
-  fetch(`http://localhost:3000/api/products/${i.id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      displayCart(i, data);
-      getTotalPrice(i, data);
-      changeQuantity();
-    });
+function BrowseIdKanap() {
+  for (const i of addProduct) {
+    fetch(`http://localhost:3000/api/products/${i.id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        displayCart(i, data);
+        //getTotalPrice(i, data);
+        //console.log("local storage: ", i);
+        changeQuantity(i, data);
+        stockKanapPrice(data);
+        totalPrice();
+        //stockKanap(i);
+      });
+  }
+}
+
+BrowseIdKanap();
+
+function stockKanapPrice(apiData) {
+  kanapPrice.push(apiData.price);
+}
+
+function stockKanapQuantity() {
+  let kanapQuantity = [];
+  let basket = getBasket();
+  for (i = 0; i < basket.length; i++) {
+    kanapQuantity.push(basket[i].quantity);
+  }
+  return kanapQuantity;
+}
+
+function totalPrice() {
+  const flagTotalPrice = document.querySelector("#totalPrice");
+  let kanapQuantity = stockKanapQuantity();
+  let calculationTotalPrice = 0;
+  for (i = 0; i < kanapQuantity.length; i++) {
+    calculationTotalPrice += parseInt(kanapQuantity[i]) * kanapPrice[i];
+    //console.log(calculationTotalPrice);
+    console.log(kanapPrice);
+  }
+  flagTotalPrice.textContent = `${calculationTotalPrice}`;
+  //console.log(kanapQuantity);
 }
 
 /////////// Boucle For Each pour remplacer la for of ///////////
@@ -69,21 +104,39 @@ function getNumberProduct() {
   let number = 0;
   for (let product of basket) {
     number += parseInt(product.quantity);
-    flagNumberProduct.innerHTML = `
-  ${number}
-  `;
   }
+  flagNumberProduct.innerHTML = `
+${number}
+`;
   return number;
 }
 getNumberProduct();
 
-const flagTotalPrice = document.querySelector("#totalPrice");
+/*const flagTotalPrice = document.querySelector("#totalPrice");
 let number = 0;
 
 const getTotalPrice = (localStorageData, apiData) => {
-  number += parseInt(localStorageData.quantity) * parseInt(apiData.price);
-  flagTotalPrice.textContent = `${number}`;
-};
+    for (const i of addProduct) {
+      fetch(`http://localhost:3000/api/products/${i.id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          a.push(data);
+
+          console.log("cc");
+          console.log(a);
+        });
+    }
+  }
+  let basket = getBasket();
+  let number = 0;
+  for (let product of basket) {
+    number += parseInt(product.quantity);
+  }
+  flagTotalPrice.innerHTML = `
+${number}
+`;
+  return number;
+};*/
 
 function removeFromBasket(product) {
   let basket = getBasket();
@@ -105,6 +158,7 @@ function changeQuantity() {
       }
       saveBasket(basket);
       getNumberProduct();
+      totalPrice();
     });
   }
 }
