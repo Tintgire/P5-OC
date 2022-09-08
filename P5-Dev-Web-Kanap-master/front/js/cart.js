@@ -8,12 +8,9 @@ function BrowseIdKanap() {
       .then((response) => response.json())
       .then((data) => {
         displayCart(i, data);
-        //getTotalPrice(i, data);
-        //console.log("local storage: ", i);
         changeQuantity(i, data);
         stockKanapPrice(data);
         totalPrice();
-        //stockKanap(i);
       });
   }
 }
@@ -39,27 +36,12 @@ function totalPrice() {
   let calculationTotalPrice = 0;
   for (i = 0; i < kanapQuantity.length; i++) {
     calculationTotalPrice += parseInt(kanapQuantity[i]) * kanapPrice[i];
-    //console.log(calculationTotalPrice);
     console.log(kanapPrice);
   }
   flagTotalPrice.textContent = `${calculationTotalPrice}`;
-  //console.log(kanapQuantity);
 }
 
-/////////// Boucle For Each pour remplacer la for of ///////////
-
-/*addProduct.forEach((i) => {
-  fetch(`http://localhost:3000/api/products/${i.id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      displayCart(i, data);
-    });
-});*/
-
 const displayCart = (localStorageData, apiData) => {
-  //console.log(localStorageData);
-  //console.log(apiData);
-
   flagItem.innerHTML += `<article class="cart__item" data-id="${localStorageData.id}" data-color="${localStorageData.color}">
             <div class="cart__item__img">
             <img src="${apiData.imageUrl}" alt="Photographie d'un canapé">
@@ -111,32 +93,6 @@ ${number}
   return number;
 }
 getNumberProduct();
-
-/*const flagTotalPrice = document.querySelector("#totalPrice");
-let number = 0;
-
-const getTotalPrice = (localStorageData, apiData) => {
-    for (const i of addProduct) {
-      fetch(`http://localhost:3000/api/products/${i.id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          a.push(data);
-
-          console.log("cc");
-          console.log(a);
-        });
-    }
-  }
-  let basket = getBasket();
-  let number = 0;
-  for (let product of basket) {
-    number += parseInt(product.quantity);
-  }
-  flagTotalPrice.innerHTML = `
-${number}
-`;
-  return number;
-};*/
 
 function removeFromBasket(product) {
   let basket = getBasket();
