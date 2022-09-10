@@ -1,8 +1,8 @@
-const addProduct = JSON.parse(localStorage.getItem("basket"));
 const flagItem = document.querySelector("#cart__items");
 let kanapPrice = [];
 
 function BrowseIdKanap() {
+  const addProduct = JSON.parse(localStorage.getItem("basket"));
   for (const i of addProduct) {
     fetch(`http://localhost:3000/api/products/${i.id}`)
       .then((response) => response.json())
@@ -11,6 +11,7 @@ function BrowseIdKanap() {
         changeQuantity(i, data);
         stockKanapPrice(data);
         totalPrice();
+        removeFromBasket();
       });
   }
 }
@@ -36,7 +37,6 @@ function totalPrice() {
   let calculationTotalPrice = 0;
   for (i = 0; i < kanapQuantity.length; i++) {
     calculationTotalPrice += parseInt(kanapQuantity[i]) * kanapPrice[i];
-    console.log(kanapPrice);
   }
   flagTotalPrice.textContent = `${calculationTotalPrice}`;
 }
@@ -94,14 +94,9 @@ ${number}
 }
 getNumberProduct();
 
-function removeFromBasket(product) {
-  let basket = getBasket();
-  basket = basket.filter((p) => p.id == product.id && p.color == product.color);
-  saveBasket(basket);
-}
-
 function changeQuantity() {
   const flagChangeQuantity = document.getElementsByClassName("itemQuantity");
+  //const flagChangeQuantity = document.querySelectorAll(".itemQuantity");
   for (let input of flagChangeQuantity) {
     input.addEventListener("change", (e) => {
       let basket = getBasket();
@@ -113,6 +108,25 @@ function changeQuantity() {
         foundProduct.quantity = kanapQuantity;
       }
       saveBasket(basket);
+      getNumberProduct();
+      totalPrice();
+    });
+  }
+}
+
+function removeFromBasket() {
+  const flagDeleteItem = document.getElementsByClassName("deleteItem");
+  for (let input of flagDeleteItem) {
+    input.addEventListener("click", (e) => {
+      let kanapDataSetId = e.target.closest(".cart__item").dataset.id;
+      let kanapDataSetColor = e.target.closest(".cart__item").dataset.color;
+      let basket = getBasket();
+      basket = basket.filter(
+        (p) => p.id != kanapDataSetId || p.color != kanapDataSetColor
+      );
+      saveBasket(basket);
+      flagItem.innerHTML = ``;
+      BrowseIdKanap();
       getNumberProduct();
       totalPrice();
     });
