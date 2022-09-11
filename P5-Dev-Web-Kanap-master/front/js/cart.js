@@ -18,6 +18,45 @@ function BrowseIdKanap() {
 }
 BrowseIdKanap();
 
+// Affiche chaque article
+const displayCart = (localStorageData, apiData) => {
+  flagItem.innerHTML += `<article class="cart__item" data-id="${localStorageData.id}" data-color="${localStorageData.color}">
+              <div class="cart__item__img">
+              <img src="${apiData.imageUrl}" alt="Photographie d'un canapé">
+              </div>
+              <div class="cart__item__content">
+              <div class="cart__item__content__description">
+              <h2>${apiData.name}</h2>
+              <p>${localStorageData.color}</p>
+              <p>${apiData.price} €</p>
+              </div>
+              <div class="cart__item__content__settings">
+              <div class="cart__item__content__settings__quantity">
+              <p>Qté : </p>
+              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${localStorageData.quantity}">
+              </div>
+              <div class="cart__item__content__settings__delete">
+              <p class="deleteItem">Supprimer</p>
+              </div>
+              </div>
+              </div>
+              </article>`;
+};
+
+// Sauvegarde dans le LS
+function saveBasket(basket) {
+  localStorage.setItem("basket", JSON.stringify(basket));
+}
+
+// Récupère le LS et stock dans la function au format JSON
+function getBasket() {
+  let basket = localStorage.getItem("basket");
+  if (basket == null) {
+    return [];
+  } else {
+    return JSON.parse(basket);
+  }
+}
 // Push dans le tableau kanapPrice
 function stockKanapPrice(apiData) {
   kanapPrice.push(apiData.price);
@@ -44,51 +83,9 @@ function totalPrice() {
   flagTotalPrice.textContent = `${calculationTotalPrice}`;
 }
 
-// Affiche chaque article
-const displayCart = (localStorageData, apiData) => {
-  flagItem.innerHTML += `<article class="cart__item" data-id="${localStorageData.id}" data-color="${localStorageData.color}">
-            <div class="cart__item__img">
-            <img src="${apiData.imageUrl}" alt="Photographie d'un canapé">
-            </div>
-            <div class="cart__item__content">
-            <div class="cart__item__content__description">
-            <h2>${apiData.name}</h2>
-            <p>${localStorageData.color}</p>
-            <p>${apiData.price} €</p>
-            </div>
-            <div class="cart__item__content__settings">
-            <div class="cart__item__content__settings__quantity">
-            <p>Qté : </p>
-            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${localStorageData.quantity}">
-            </div>
-            <div class="cart__item__content__settings__delete">
-            <p class="deleteItem">Supprimer</p>
-            </div>
-            </div>
-            </div>
-            </article>`;
-};
-////////////////////////////////////////// Etape 9 //////////////////////////////////////////
-
-const flagNumberProduct = document.querySelector("#totalQuantity");
-
-// Sauvegarde dans le LS
-function saveBasket(basket) {
-  localStorage.setItem("basket", JSON.stringify(basket));
-}
-
-// Récupère le LS et stock dans la function au format JSON
-function getBasket() {
-  let basket = localStorage.getItem("basket");
-  if (basket == null) {
-    return [];
-  } else {
-    return JSON.parse(basket);
-  }
-}
-
 // Affiche et calcul le quantité total du nombre d'article du LS
 function getNumberProduct() {
+  const flagNumberProduct = document.querySelector("#totalQuantity");
   let basket = getBasket();
   let number = 0;
   for (let product of basket) {
@@ -104,7 +101,6 @@ getNumberProduct();
 // Change la quantité dans le LS sur L'id indiqué
 function changeQuantity() {
   const flagChangeQuantity = document.getElementsByClassName("itemQuantity");
-  //const flagChangeQuantity = document.querySelectorAll(".itemQuantity");
   for (let input of flagChangeQuantity) {
     input.addEventListener("change", (e) => {
       let basket = getBasket();
