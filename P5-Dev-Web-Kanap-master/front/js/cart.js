@@ -1,6 +1,7 @@
 const flagItem = document.querySelector("#cart__items");
 let kanapPrice = [];
 
+// Function Main qui permet de trier l'api en fonction du LS
 function BrowseIdKanap() {
   const addProduct = JSON.parse(localStorage.getItem("basket"));
   for (const i of addProduct) {
@@ -15,13 +16,14 @@ function BrowseIdKanap() {
       });
   }
 }
-
 BrowseIdKanap();
 
+// Push dans le tableau kanapPrice
 function stockKanapPrice(apiData) {
   kanapPrice.push(apiData.price);
 }
 
+// Stock dans la function la quantité de Kanap
 function stockKanapQuantity() {
   let kanapQuantity = [];
   let basket = getBasket();
@@ -31,6 +33,7 @@ function stockKanapQuantity() {
   return kanapQuantity;
 }
 
+// Affiche et calcul le prix total
 function totalPrice() {
   const flagTotalPrice = document.querySelector("#totalPrice");
   let kanapQuantity = stockKanapQuantity();
@@ -41,6 +44,7 @@ function totalPrice() {
   flagTotalPrice.textContent = `${calculationTotalPrice}`;
 }
 
+// Affiche chaque article
 const displayCart = (localStorageData, apiData) => {
   flagItem.innerHTML += `<article class="cart__item" data-id="${localStorageData.id}" data-color="${localStorageData.color}">
             <div class="cart__item__img">
@@ -68,10 +72,12 @@ const displayCart = (localStorageData, apiData) => {
 
 const flagNumberProduct = document.querySelector("#totalQuantity");
 
+// Sauvegarde dans le LS
 function saveBasket(basket) {
   localStorage.setItem("basket", JSON.stringify(basket));
 }
 
+// Récupère le LS et stock dans la function au format JSON
 function getBasket() {
   let basket = localStorage.getItem("basket");
   if (basket == null) {
@@ -81,6 +87,7 @@ function getBasket() {
   }
 }
 
+// Affiche et calcul le quantité total du nombre d'article du LS
 function getNumberProduct() {
   let basket = getBasket();
   let number = 0;
@@ -94,6 +101,7 @@ ${number}
 }
 getNumberProduct();
 
+// Change la quantité dans le LS sur L'id indiqué
 function changeQuantity() {
   const flagChangeQuantity = document.getElementsByClassName("itemQuantity");
   //const flagChangeQuantity = document.querySelectorAll(".itemQuantity");
@@ -102,7 +110,6 @@ function changeQuantity() {
       let basket = getBasket();
       let kanapDataSetId = e.target.closest(".cart__item").dataset.id;
       let kanapQuantity = e.target.value;
-
       let foundProduct = basket.find((p) => p.id == kanapDataSetId);
       if (foundProduct != undefined) {
         foundProduct.quantity = kanapQuantity;
@@ -114,6 +121,7 @@ function changeQuantity() {
   }
 }
 
+// Supprime l'article au "Click"
 function removeFromBasket() {
   const flagDeleteItem = document.getElementsByClassName("deleteItem");
   for (let input of flagDeleteItem) {
