@@ -136,3 +136,61 @@ function removeFromBasket() {
     });
   }
 }
+
+//////////////////// Formulaire ////////////////////
+
+/*document.querySelector("#order").addEventListener("click", (e) => {
+  e.preventDefault();
+  let fields = document.querySelectorAll("#firstName, #lastName");
+  let valid = true;
+  for (let field of fields) {
+    valid &= check(field);
+    if (!valid) {
+      break;
+    }
+  }
+  if (valid) {
+    console.log("Le Formulaire est bien remplis");
+  }
+});
+
+function check(input) {
+  if (input.validity.tooShort) {
+    input.setCustomValidity(`Ce champ doit comporter au moins 3 caractères`);
+  }
+  if (input.validity.valueMissing) {
+    input.setCustomValidity("Ce champ est obligatoire");
+  }
+  return input.reportValidity();
+}*/
+
+document.querySelector("#order").addEventListener("click", (e) => {
+  e.preventDefault();
+  let basket = getBasket();
+
+  const contact = {
+    firstName: document.querySelector("#firstName").value,
+    lastName: document.querySelector("#lastName").value,
+    address: document.querySelector("#address").value,
+    city: document.querySelector("#city").value,
+    email: document.querySelector("#email").value,
+  };
+
+  let products = [];
+
+  for (let kanap of basket) {
+    products.push(kanap.id);
+  }
+
+  const orderId = fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify({ contact, products }),
+  });
+  orderId.then(async (res) => {
+    const data = await res.json();
+    console.log(`${data.orderId}`);
+    //document.querySelector("#orderId").textContent = `${data.orderId}`;
+    location.href = `confirmation.html?${data.orderId}`;
+  });
+});
