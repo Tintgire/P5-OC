@@ -4,6 +4,13 @@ let kanapPrice = [];
 // Function Main qui permet de trier l'api en fonction du LS
 function BrowseIdKanap() {
   const addProduct = JSON.parse(localStorage.getItem("basket"));
+  if (addProduct <= 0) {
+    document.querySelector(
+      "h1"
+    ).innerHTML = `Votre panier est tristement vide :-(`;
+    document.querySelector("#totalPrice").textContent = `0`;
+    return;
+  }
   for (const i of addProduct) {
     fetch(`http://localhost:3000/api/products/${i.id}`)
       .then((response) => response.json())
@@ -13,6 +20,7 @@ function BrowseIdKanap() {
         stockKanapPrice(data);
         totalPrice();
         removeFromBasket();
+        console.log("cc");
       });
   }
 }
