@@ -147,31 +147,6 @@ function removeFromBasket() {
 
 //////////////////// Formulaire ////////////////////
 
-/*document.querySelector("#order").addEventListener("click", (e) => {
-  e.preventDefault();
-  let fields = document.querySelectorAll("#firstName, #lastName");
-  let valid = true;
-  for (let field of fields) {
-    valid &= check(field);
-    if (!valid) {
-      break;
-    }
-  }
-  if (valid) {
-    console.log("Le Formulaire est bien remplis");
-  }
-});
-
-function check(input) {
-  if (input.validity.tooShort) {
-    input.setCustomValidity(`Ce champ doit comporter au moins 3 caractères`);
-  }
-  if (input.validity.valueMissing) {
-    input.setCustomValidity("Ce champ est obligatoire");
-  }
-  return input.reportValidity();
-}*/
-
 document.querySelector("#order").addEventListener("click", (e) => {
   e.preventDefault();
   let basket = getBasket();
