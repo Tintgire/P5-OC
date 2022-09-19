@@ -20,7 +20,6 @@ function BrowseIdKanap() {
         stockKanapPrice(data);
         totalPrice();
         removeFromBasket();
-        console.log("cc");
       });
   }
 }
@@ -147,10 +146,94 @@ function removeFromBasket() {
 
 //////////////////// Formulaire ////////////////////
 
+// Au clic de commander !
 document.querySelector("#order").addEventListener("click", (e) => {
   e.preventDefault();
-  let basket = getBasket();
 
+  resetTextError();
+  testRegex();
+});
+
+function firstName() {
+  return /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/.test(
+    document.querySelector("#firstName").value
+  );
+}
+
+function lastName() {
+  return /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/.test(
+    document.querySelector("#lastName").value
+  );
+}
+
+function address() {
+  return /^[#.0-9a-zA-ZÀ-ÿ\s,-]{2,60}$/.test(
+    document.querySelector("#address").value
+  );
+}
+
+function city() {
+  return /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/.test(
+    document.querySelector("#city").value
+  );
+}
+
+function email() {
+  return /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/.test(
+    document.querySelector("#email").value
+  );
+}
+
+// Reset le message error
+function resetTextError() {
+  document.querySelector("#firstNameErrorMsg").textContent = ``;
+  document.querySelector("#lastNameErrorMsg").textContent = ``;
+  document.querySelector("#addressErrorMsg").textContent = ``;
+  document.querySelector("#cityErrorMsg").textContent = ``;
+  document.querySelector("#emailErrorMsg").textContent = ``;
+}
+
+// Test conditions
+function testRegex() {
+  const booleanFirstName = firstName();
+  const booleanLastName = lastName();
+  const booleanAddress = address();
+  const booleanCity = city();
+  const booleanEmail = email();
+
+  if (booleanFirstName == false) {
+    document.querySelector("#firstNameErrorMsg").textContent =
+      "Merci de renseigner un prénom valide";
+  }
+  if (booleanLastName == false) {
+    document.querySelector("#lastNameErrorMsg").textContent =
+      "Merci de renseigner un nom valide";
+  }
+  if (booleanAddress == false) {
+    document.querySelector("#addressErrorMsg").textContent =
+      "Merci de renseigner une adresse valide";
+  }
+  if (booleanCity == false) {
+    document.querySelector("#cityErrorMsg").textContent =
+      "Merci de renseigner une adresse valide";
+  }
+  if (booleanEmail == false) {
+    document.querySelector("#emailErrorMsg").textContent =
+      "Merci de renseigner une adresse valide";
+  }
+  if (
+    booleanFirstName &&
+    booleanLastName &&
+    booleanAddress &&
+    booleanCity &&
+    booleanEmail
+  ) {
+    createPushApi();
+  }
+}
+
+// Créer l objet contact, products puis le push dans l'api et envoie ensuite sur la page confirmation
+function createPushApi() {
   const contact = {
     firstName: document.querySelector("#firstName").value,
     lastName: document.querySelector("#lastName").value,
@@ -161,10 +244,10 @@ document.querySelector("#order").addEventListener("click", (e) => {
 
   let products = [];
 
+  let basket = getBasket();
   for (let kanap of basket) {
     products.push(kanap.id);
   }
-
   const orderId = fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: { "Content-type": "application/json" },
@@ -172,8 +255,6 @@ document.querySelector("#order").addEventListener("click", (e) => {
   });
   orderId.then(async (res) => {
     const data = await res.json();
-    console.log(`${data.orderId}`);
-    //document.querySelector("#orderId").textContent = `${data.orderId}`;
     location.href = `confirmation.html?${data.orderId}`;
   });
-});
+}
