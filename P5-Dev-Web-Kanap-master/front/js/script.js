@@ -1,16 +1,12 @@
 let getItems = document.querySelector("#items");
 
+// Récupère LS puis le boucle en l'affichant dans le dom pour chaque Object
 fetch("http://localhost:3000/api/products")
   .then(function (res) {
-    return res.json(); // Api retourner en fichier promise json
+    return res.json();
   })
   .then(function (data) {
-    // data est le fichier json qui est stocker
-    //console.log(data);
-    console.log(data);
     data.forEach((e) => {
-      // boucle Pour Chaque avec un paramètre variable qui représente chaque élement du tableau
-      // innerHTML va injecter du code dynamiquement via la boucle
       getItems.innerHTML += `
       <a href="./product.html?id=${e._id}">
         <article>
@@ -22,6 +18,3 @@ fetch("http://localhost:3000/api/products")
       `;
     });
   });
-
-// tu récupère ton localstorage, tu le boucle et dans la boucle tu fetch avec l'ID. le résultat du fetch
-//après tu peux l'envoyer dans une fonction qui va afficher le panier avec toutes les données
