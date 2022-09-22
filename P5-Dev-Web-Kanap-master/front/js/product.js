@@ -59,22 +59,6 @@ function addBasket(product) {
   saveBasket(basket);
 }
 
-// Vérification avant d'ajouter au panier
-function verification() {
-  if (
-    (selectedQuantity < 1 && selectedColor == "") ||
-    (selectedQuantity > 100 && selectedColor == "")
-  ) {
-    alert("Veuillez choisir une quantité entre 1 et 100 et une couleur");
-  } else if (selectedQuantity < 1 || selectedQuantity > 100) {
-    alert("Veuillez choisir une quantité entre 1 et 100");
-  } else if (selectedQuantity == null) {
-    alert("Oups vous avez oublié de choisir une quantité");
-  } else if (selectedColor == "") {
-    alert("Oups vous avez oublié de choisir une couleur");
-  } else addBasket(product);
-}
-
 // Création d'un objet avec l'Id, color et quantity
 function takeIdColorsQuantity() {
   flagAddToCart.addEventListener("click", () => {
@@ -87,6 +71,18 @@ function takeIdColorsQuantity() {
       color: selectedColor,
       quantity: selectedQuantity,
     };
-    verification();
+
+    if (
+      (selectedQuantity < 1 && selectedColor == "") ||
+      (selectedQuantity > 100 && selectedColor == "")
+    ) {
+      alert("Veuillez choisir une quantité entre 1 et 100 et une couleur");
+    } else if (selectedQuantity < 1 || selectedQuantity > 100) {
+      alert("Veuillez choisir une quantité entre 1 et 100");
+    } else if (selectedQuantity == null) {
+      alert("Oups vous avez oublié de choisir une quantité");
+    } else if (selectedColor == "") {
+      alert("Oups vous avez oublié de choisir une couleur");
+    } else addBasket(product);
   });
 }
