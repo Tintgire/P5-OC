@@ -16,7 +16,7 @@ function BrowseIdKanap() {
       .then((response) => response.json())
       .then((data) => {
         displayCart(i, data);
-        changeQuantity(i, data);
+        changeQuantity();
         stockKanapPrice(data);
         totalPrice();
         removeFromBasket();
