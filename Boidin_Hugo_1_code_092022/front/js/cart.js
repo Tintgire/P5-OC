@@ -114,17 +114,19 @@ function changeQuantity() {
       let kanapDataSetId = e.target.closest(".cart__item").dataset.id;
       let kanapDataSetColor = e.target.closest(".cart__item").dataset.color;
       let kanapQuantity = e.target.value;
-      console.log(kanapQuantity);
-      console.log(kanapDataSetId);
-      let foundProduct = basket.find(
-        (p) => p.id == kanapDataSetId && p.color == kanapDataSetColor
-      );
-      if (foundProduct != undefined) {
-        foundProduct.quantity = kanapQuantity;
+      if (kanapQuantity < 1 || kanapQuantity > 100) {
+        alert("Veuillez choisir une quantité entre 1 et 100");
+      } else {
+        let foundProduct = basket.find(
+          (p) => p.id == kanapDataSetId && p.color == kanapDataSetColor
+        );
+        if (foundProduct != undefined) {
+          foundProduct.quantity = kanapQuantity;
+        }
+        saveBasket(basket);
+        getNumberProduct();
+        totalPrice();
       }
-      saveBasket(basket);
-      getNumberProduct();
-      totalPrice();
     });
   }
 }
