@@ -112,8 +112,13 @@ function changeQuantity() {
     input.addEventListener("change", (e) => {
       let basket = getBasket();
       let kanapDataSetId = e.target.closest(".cart__item").dataset.id;
+      let kanapDataSetColor = e.target.closest(".cart__item").dataset.color;
       let kanapQuantity = e.target.value;
-      let foundProduct = basket.find((p) => p.id == kanapDataSetId);
+      console.log(kanapQuantity);
+      console.log(kanapDataSetId);
+      let foundProduct = basket.find(
+        (p) => p.id == kanapDataSetId && p.color == kanapDataSetColor
+      );
       if (foundProduct != undefined) {
         foundProduct.quantity = kanapQuantity;
       }
